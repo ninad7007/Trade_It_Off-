@@ -1,0 +1,29 @@
+<% include header %>
+<div class="container">
+  <div class="row">
+    <div class="col-md-3">
+      <p class="lead">TradeItOff!</p>
+      <div class="list-group">
+        <li class="list-group-item active">Info 1</li>
+        <li class="list-group-item">Info 2</li>
+        <li class="list-group-item">Info 3</li>
+      </div>
+    </div>
+    <div class="col-md-9">
+      <div class="thumbnail">
+        <img class="img-responsive" src=<%= product.img_url %> alt="">
+        <div class="caption-full">
+          <h4 class="pull-right"><i class="fas fa-rupee-sign"></i><%=product.price%></h4>
+          <h4><a><%= product.product_name %></a></h4>
+          <p><%= product.description %></p>
+        </div>
+      </div>
+      <div class="well">
+        <div class="text-right">
+          <a href="" class="btn btn-success">BUY NOW</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+ <% include footer %>
