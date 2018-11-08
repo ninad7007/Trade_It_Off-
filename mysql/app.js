@@ -76,6 +76,18 @@ app.get("/cars",function(req,res){
   });
 });
 
+//Electronics
+app.get("/cars",function(req,res){
+  var sql="select * from products where category='electronics'";
+  con.query(sql,function(err,products,fields){
+    if(err) console.log(err);
+    else{
+      res.render("electronics.ejs", {products:products});
+    }
+  });
+});
+
+
 //mobiles
 app.get("/mobiles",function(req,res){
   var sql="select * from products where category='mobiles'";
@@ -101,10 +113,10 @@ app.get("/furniture",function(req,res){
 //bikes
 app.get("/bikes",function(req,res){
   var sql="select * from products p where p.category='bikes'";
-  con.query(sql,function(err,bikes,fields){
+  con.query(sql,function(err,products,fields){
     if(err) console.log(err);
     else{
-      res.render("bikes.ejs", {bikes:bikes});
+      res.render("bikes.ejs", {products:products});
     }
   });
 });
@@ -157,9 +169,8 @@ app.get("/products/new", isLoggedIn , function(req,res){
 
 app.get("/products/:id",function(req,res){
   var pid=req.params.id;
-  //find campgrounds by
-  var q = "select * from products where product_id=?";
-  con.query(q,[pid], function(err,product,fields){
+  var q = "select * from products where product_id="+pid;
+  con.query(q, function(err,product,fields){
     if(err){
       console.log(err);
     }
@@ -170,6 +181,51 @@ app.get("/products/:id",function(req,res){
   });
 });
 
+//orders route
+app.get("/orders",isLoggedIn,function(req,res){
+  var user_id=req.user.username;
+  var q="select * from orders where user_id =" + "'" + user_id + "'";
+  con.query(q,function(err,orders,fields){
+    if(err){
+      console.log(err);
+    }
+    else{
+      res.render("orders.ejs",{orders:orders});
+    }
+  });
+});
+
+
+//Buy route
+app.get("/products/buy/:id",isLoggedIn,function(req,res){
+  var product_id=req.params.id;
+  var order={
+    user_id:req.user.username,
+    product_id:product_id
+  }
+  var sql="insert into orders set ?";
+  con.query(sql,order,function(err,order,fields){
+    if(err){
+      console.log(err);
+    }
+    else{
+      console.log(order);
+    }
+  });
+  var q="delete from products where product_id=?";
+  con.query(q,product_id,function(err,product,fields){
+    if(err){
+      console.log(err);
+    }
+    else{
+      res.render("buy.ejs");
+    }
+  });
+});
+
+app.get("/offers", isLoggedIn , function(req,res){
+  res.render("offers.ejs");
+});
 
 //Auth routes
 app.get("/register",function(req,res){
