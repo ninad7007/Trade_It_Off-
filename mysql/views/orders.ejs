@@ -1,5 +1,11 @@
 <% include header %>
-<% orders.forEach(function(order){ %>
-  <p><%= order.product_id %></p>
-<% }); %>
+<div class="container">
+  <div class="jumbotron">
+    <h1>Your previous orders</h1>
+  </div>
+  <% orders.forEach(function(order){ %>
+    <h3><%= order.product_name %> <i class="fas fa-rupee-sign"></i><%= order.product_cost %></h3>
+    <!-- <h3><i class="fas fa-rupee-sign"></i><%= order.product_cost %></h3> -->
+    <% }); %>
+</div>
 <% include footer %>

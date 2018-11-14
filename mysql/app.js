@@ -121,13 +121,14 @@ app.get("/bikes",function(req,res){
   });
 });
 
+//add new user
 app.post("/user",function(req,res){
   var user={
     user_id:req.user.username,
     user_name:req.body.name,
     address: req.body.address,
-    phone: req.body.phone,
-    gender: req.body.gender
+    gender: req.body.gender,
+    phone: req.body.phone
   };
   var q = "insert into user set ?";
   con.query(q, user, function(err,results,fields){
@@ -197,10 +198,15 @@ app.get("/orders",isLoggedIn,function(req,res){
 
 
 //Buy route
-app.get("/products/buy/:id",isLoggedIn,function(req,res){
+app.get("/products/buy/:id/:name/:cost/:category/:seller",isLoggedIn,function(req,res){
   var product_id=req.params.id;
+  var seller_id=req.params.seller;
   var order={
     user_id:req.user.username,
+    seller_id:req.params.seller,
+    category:req.params.category,
+    product_name:req.params.name,
+    product_cost:req.params.cost,
     product_id:product_id
   }
   var sql="insert into orders set ?";
@@ -218,13 +224,33 @@ app.get("/products/buy/:id",isLoggedIn,function(req,res){
       console.log(err);
     }
     else{
-      res.render("buy.ejs");
+      res.render("buy.ejs",{seller_id:seller_id});
     }
   });
 });
 
 app.get("/offers", isLoggedIn , function(req,res){
   res.render("offers.ejs");
+});
+
+app.post("/review/:seller",function(req,res){
+  var r=req.body.rate;
+  var user=req.user.username;
+  var seller=req.params.seller;
+  var rate={
+    user_id : user,
+    seller_id : seller,
+    rating : r
+  }
+  var q="insert into seller_rating set ?";
+  con.query(q,rate,function(err,rating,fields){
+    if(err){
+      console.log(err);
+    }
+    else{
+      res.redirect("/products");
+    }
+  })
 });
 
 //Auth routes
@@ -245,6 +271,7 @@ app.post("/register",function(req,res){
     });
   });
 });
+
 
 //Login routes
 app.get("/login",function(req,res){
