@@ -23,10 +23,6 @@ passport.use(new localStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-app.use(function(req, res, next) {
-  res.locals.currentUser = req.user;
-  next();
-});
 
 //mongoose connection
 mongoose.connect("mongodb://localhost/sample",{ useNewUrlParser: true });
@@ -50,6 +46,13 @@ con.connect(function(err){
 //   console.log(result);
 // });
 
+//displaying current user
+app.use(function(req,res,next){
+  res.locals.currentUser=req.user;
+  next();
+});
+
+
 
 app.get("/",function(req,res){
   res.render("landing.ejs");
@@ -67,59 +70,60 @@ app.get("/products",function(req,res){
 });
 //cars
 app.get("/cars",function(req,res){
-  var sql="select * from products where category='cars'";
+  var sql="call proc('cars')";
   con.query(sql,function(err,products,fields){
     if(err) console.log(err);
     else{
-      res.render("cars.ejs", {products:products});
+      // console.log(products);
+      res.render("cars.ejs", {products:products[0]});
     }
   });
 });
 
 //Electronics
-app.get("/cars",function(req,res){
-  var sql="select * from products where category='electronics'";
+app.get("/electronics",function(req,res){
+  var sql="call proc('electronics')";
   con.query(sql,function(err,products,fields){
     if(err) console.log(err);
     else{
-      res.render("electronics.ejs", {products:products});
+      res.render("electronics.ejs", {products:products[0]});
     }
   });
 });
 
-
 //mobiles
 app.get("/mobiles",function(req,res){
-  var sql="select * from products where category='mobiles'";
+  var sql="call proc('mobiles')";
   con.query(sql,function(err,products,fields){
     if(err) console.log(err);
     else{
-      res.render("mobiles.ejs", {products:products});
+      res.render("mobiles.ejs", {products:products[0]});
     }
   });
 });
 
 //furniture
 app.get("/furniture",function(req,res){
-  var sql="select * from products where category='furniture'";
+  var sql="call proc('furniture')";
   con.query(sql,function(err,products,fields){
     if(err) console.log(err);
     else{
-      res.render("furniture.ejs", {products:products});
+      res.render("furniture.ejs", {products:products[0]});
     }
   });
 });
 
 //bikes
 app.get("/bikes",function(req,res){
-  var sql="select * from products p where p.category='bikes'";
+  var sql="call proc('bikes')";
   con.query(sql,function(err,products,fields){
     if(err) console.log(err);
     else{
-      res.render("bikes.ejs", {products:products});
+      res.render("bikes.ejs", {products:products[0]});
     }
   });
 });
+
 
 //add new user
 app.post("/user",function(req,res){
@@ -132,7 +136,9 @@ app.post("/user",function(req,res){
   };
   var q = "insert into user set ?";
   con.query(q, user, function(err,results,fields){
-    if(err) throw err;
+    if(err){
+      res.render("valid_phone.ejs");
+    }
     else {
       console.log(results);
       res.redirect("/");
@@ -212,7 +218,7 @@ app.get("/products/buy/:id/:name/:cost/:category/:seller",isLoggedIn,function(re
   var sql="insert into orders set ?";
   con.query(sql,order,function(err,order,fields){
     if(err){
-      console.log(err);
+      res.render("invalid_order.ejs");
     }
     else{
       console.log(order);
