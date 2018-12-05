@@ -1,0 +1,42 @@
+<% include header %>
+<div class="container">
+  <div class="row">
+    <h1 style="text-align:center">Add a new product</h1>
+    <div style="width:30%; margin:25px auto">
+      <form class="" action="/products" method="post">
+        <div class="form-group">
+          <input class="form-control" type="text" name="name" value="" placeholder="Product name">
+        </div>
+        <div class="form-group">
+          <input class="form-control" type="text" name="image" value="" placeholder="image url">
+        </div>
+        <div class="form-group">
+          <input class="form-control" type="text" name="price" value="" placeholder="price">
+        </div>
+        <div class="form-group">
+          <div class="styled-select blue semi-square">
+            <select name="category">
+              <option>Select a category</option>
+              <option value="mobile">Mobiles</option>
+              <option value="cars">Cars</option>
+              <option value="bikes">Bikes</option>
+              <option value="electronics">Electronics</option>
+              <option value="furniture">Furniutre</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <input class="form-control" type="text" name="description" value="" placeholder="description">
+        </div>
+        <!-- <div class="form-group">
+          <input class="form-control" type="text" name="description" value="" placeholder="description">
+        </div> -->
+        <div class=form-group>
+          <input type="submit" class="btn btn-lg btn-primary btn-block" name="" value="submit" placeholder="submit">
+        </div>
+      </form>
+      <a href="/">GO BACK</a>
+    </div>
+  </div>
+</div>
+<% include footer %>

@@ -1,0 +1,19 @@
+body{
+  padding-top: 70px;
+
+}
+
+.navbar-inverse .navbar-nav>li>a {
+color: white;
+}
+.navbar-inverse .navbar-brand {
+color: white;
+}
+
+.navbar-inverse{
+  background: #19113a;
+}
+
+.jumbotron{
+  color:#19113a;
+}
