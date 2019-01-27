@@ -1,0 +1,34 @@
+Triggers
+Checking if the product is added by the currently logged in user
+DELIMITER $$
+CREATE TRIGGER `TR_BeforeInsert_Orders`
+BEFORE INSERT ON `orders`
+FOR EACH ROW
+BEGIN
+    IF new.user_id=new.seller_id THEN
+    SIGNAL SQLSTATE '12345'
+        SET MESSAGE_TEXT = 'Sorry you cannot buy this product';
+    END IF;
+END$$
+DELIMITER ;
+
+Checking phone number
+DELIMITER $$
+CREATE TRIGGER `TR_BeforeInsert_Users`
+BEFORE INSERT ON `users`
+FOR EACH ROW
+BEGIN
+    IF length(new.phone)!=10 THEN
+    SIGNAL SQLSTATE '12345'
+        SET MESSAGE_TEXT = 'Invalid Phone number';
+    END IF;
+END$$
+DELIMITER ;
+
+Stored procedure for accessing different products based on their categories:
+DELIMITER $$
+CREATE PROCEDURE `proc`(IN done char(50))
+ BEGIN
+ SELECT * FROM products WHERE category = done;
+ END$$
+ DELIMITER ;
